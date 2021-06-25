@@ -1,11 +1,28 @@
-import pptxgen from 'pptxgenjs';
+import Pptxgen from 'pptxgenjs';
 
-export async function createSlide() {
-  let pptx = new pptxgen();
-  pptx.author = 'Brent Ely';
-  pptx.company = 'S.T.A.R. Laboratories';
-  pptx.subject = 'Annual Report';
-  pptx.title = 'PptxGenJS Sample Presentation';
+interface Sentences {
+  content: string;
+  keywords: string[];
+  images: string[];
+}
+interface Topics {
+  title: string;
+  subtitle: string;
+  sentences: Sentences[];
+}
+interface SlideProps {
+  topics: Topics[];
+  references: string[];
+}
+
+export default async function createSlide({
+  topics
+}: SlideProps): Promise<void> {
+  const pptx = new Pptxgen();
+  pptx.author = 'Héber';
+  pptx.company = 'Slide Generator';
+  pptx.subject = 'Tema do slide';
+  pptx.title = 'Tema do slide apresentação';
 
   pptx.defineSlideMaster({
     title: 'TITLE_SLIDE',
@@ -86,34 +103,36 @@ export async function createSlide() {
     ]
   });
 
-  const numSlides = 6;
+  let slide: Pptxgen.Slide;
 
-  for (let i = 0; i < numSlides; i++) {
-    let slide: pptxgen.Slide;
-    if (i === 0) {
-      slide = pptx.addSlide({
-        masterName: 'TITLE_SLIDE'
-      });
+  slide = pptx.addSlide({
+    masterName: 'TITLE_SLIDE'
+  });
+  slide.background = {
+    path: 'https://lh5.googleusercontent.com/-sWTC2hdb7HY/TXRFfsqSFZI/AAAAAAAAAdQ/Y6H0Zvy3ia0/s1600/guerra+fria+corrida+armamentista+gorbachev+uniao+sovietica+urss+corrida+armamentista.jpg'
+  };
 
-      slide.background = {
-        path: 'https://guiadoensino.com.br/wp-content/uploads/2020/01/guerra-fria-noticias-ao-minuto.jpg'
-      };
-    } else if (i === numSlides - 1) {
-      slide = pptx.addSlide({
-        masterName: 'THANKS_SLIDE'
-      });
-    } else {
+  topics.forEach(topic => {
+    topic.sentences.forEach(sentence => {
       slide = pptx.addSlide({
         masterName: 'MASTER_SLIDE'
       });
-    }
-
-    slide.addText('How To Create PowerPoint Presentations with JavaScript', {
-      x: 0.5,
-      y: 0.7,
-      fontSize: 18
+      slide.addText(topic.title, {
+        x: 0.5,
+        y: 0.7,
+        fontSize: 18
+      });
+      slide.addText(sentence.content, {
+        x: 1.5,
+        y: 1.7,
+        fontSize: 18
+      });
     });
-  }
+  });
+
+  slide = pptx.addSlide({
+    masterName: 'THANKS_SLIDE'
+  });
 
   // 4. Save the pptxentation
   pptx.writeFile({ fileName: 'Sample pptxentation.pptx' });

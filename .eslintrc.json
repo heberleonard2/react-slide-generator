@@ -11,9 +11,7 @@
     "plugin:react/recommended",
     "airbnb",
     "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
-    "prettier/airbnb",
-    "prettier/react"
+    "prettier"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -27,6 +25,31 @@
   "rules": {
     "prettier/prettier": "error",
     "space-before-function-paren": "off",
-    "react/props-types": "off"
+    "react/react-in-jsx-scope": "off",
+    "react/props-types": "off",
+    "import/extensions": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "react/jsx-filename-extension": [
+      2,
+      { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
+    ],
+    "react/jsx-props-no-spreading": "off",
+    "import/prefer-default-export": "off",
+    "jsx-a11y/label-has-associated-control": [
+      "error",
+      {
+        "required": {
+          "some": ["nesting", "id"]
+        }
+      }
+    ],
+    "jsx-a11y/label-has-for": [
+      "error",
+      {
+        "required": {
+          "some": ["nesting", "id"]
+        }
+      }
+    ]
   }
 }
