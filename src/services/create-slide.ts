@@ -13,10 +13,12 @@ interface Topics {
 interface SlideProps {
   topics: Topics[];
   references: string[];
+  subject: string;
 }
 
-export default async function createSlide({
-  topics
+export async function createSlide({
+  topics,
+  subject
 }: SlideProps): Promise<void> {
   const pptx = new Pptxgen();
   pptx.author = 'Héber';
@@ -32,7 +34,7 @@ export default async function createSlide({
       },
       {
         text: {
-          text: 'Guerra Fria',
+          text: subject,
           options: {
             x: 1.0,
             y: 1.3,
@@ -124,7 +126,7 @@ export default async function createSlide({
       });
       slide.addText(sentence.content, {
         x: 1.5,
-        y: 1.7,
+        y: 2.7,
         fontSize: 18
       });
     });

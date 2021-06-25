@@ -6,11 +6,14 @@ import {
   FormControl,
   FormLabel,
   Stack,
-  Button
+  Button,
+  Heading,
+  SlideFade
 } from '@chakra-ui/react';
 import Head from 'next/head';
 
-import createSlide from '../services/slide';
+import { createSlide } from '../services/create-slide';
+import api from '../services/api';
 
 export default function Home() {
   const [maxSlides, setMaxSlides] = useState('');
@@ -34,29 +37,29 @@ export default function Home() {
 
   async function handleDownloadSlide(e: FormEvent<HTMLDivElement>) {
     e.preventDefault();
-    const response = await fetch(
-      'https://slide-generator-backend.herokuapp.com/slide/',
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          max_slides: maxSlides,
-          subject
-        })
-      }
-    );
-    const data = await response.json();
-    createSlide(data);
+    const response = await api.post('/slide/', {
+      max_slides: maxSlides,
+      subject,
+      language: 'pt'
+    });
+
+    const slideData = {
+      ...response.data,
+      subject
+    };
+    createSlide(slideData);
   }
 
   return (
     <>
       <Head>Slide Generator</Head>
-      <Flex h="100%">
+      <Flex h="100%" backgroundColor="cyan.700">
         <Flex
           w="100%"
           align="center"
           justify="center"
           p="8"
+          backgroundColor="white"
           maxWidth={{ base: '100%', lg: '500px', xl: '600px' }}
         >
           <Flex
@@ -110,8 +113,16 @@ export default function Home() {
             backgroundColor="cyan.700"
             h="100%"
             flex="1"
+            align="center"
+            justify="center"
             display={{ base: 'none', lg: 'flex' }}
-          />
+          >
+            <SlideFade in offsetY="20px">
+              <Heading color="white" size="3xl">
+                Slide
+              </Heading>
+            </SlideFade>
+          </Flex>
         )}
       </Flex>
     </>
